@@ -1,7 +1,9 @@
 #include <ctype.h>   // for isspace
+#include <locale.h>  // for setting the locale
 #include <stdbool.h> // for boolean
-#include <stdio.h>
-#include <string.h> // for using string functions
+#include <stdio.h>   // standard input/output
+#include <string.h>  // for using string functions
+#include <wchar.h>   // To read wide/unicode characters
 
 long countBytes(FILE *file);
 long countLines(FILE *file);
@@ -10,6 +12,7 @@ long countCharacters(FILE *file);
 void resetFilePointer(FILE *file);
 
 int main(int argc, char *argv[]) {
+  setlocale(LC_ALL, "");
   if (argc <= 1) {
     printf("Invalid Command\n");
     return 1;
@@ -90,8 +93,8 @@ long countWords(FILE *file) {
 
 long countCharacters(FILE *file) {
   long characters = 0;
-  char ch;
-  while ((ch = fgetc(file)) != EOF) {
+  wint_t ch;
+  while ((ch = fgetwc(file)) != WEOF) {
     characters = characters + 1;
   }
   resetFilePointer(file);
